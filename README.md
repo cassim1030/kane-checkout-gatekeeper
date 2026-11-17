@@ -92,7 +92,7 @@ The gate never fakes a result: if `kane-cli` is missing it prints
 - [x] Install + authenticate Kane CLI, run `./gate.sh`, keep the FAIL evidence.
 - [x] Fix the bug from Kane's evidence, re-run the gate until it PASSES
   (passed 17 Nov 2026, session `1d79a092`).
-- [ ] Push to a public GitHub repo (repo must be initialised on/after 12 Nov 2026).
+- [x] Push to a public GitHub repo (repo must be initialised on/after 12 Nov 2026) — done 17 Nov 2026: https://github.com/cassim1030/kane-checkout-gatekeeper (created today, Public, 3 commits).
 - [ ] Record a 3–5 min YouTube demo video (show the Kane fail, the fix, the pass).
 - [ ] At least 2 public posts about the project (X / Hacker News / Reddit / LinkedIn).
 - [ ] Submit before 19 Nov 23:59 IST via https://www.kaneclihack.sh/o/submit

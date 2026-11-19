@@ -9,6 +9,30 @@ const PRODUCTS = [
 
 let cart = {}; // product id -> quantity
 let guestEmail = "";
+let appliedDiscount = null; // { code, rate } once a valid code is applied
+
+const DISCOUNT_CODES = { SAVE10: 0.1 }; // SAVE10 = 10% off the cart total
+
+function applyDiscount(code) {
+  const normalized = String(code || "").trim().toUpperCase();
+  const rate = DISCOUNT_CODES[normalized];
+  if (rate === undefined) return false;
+  appliedDiscount = { code: normalized, rate };
+  return true;
+}
+
+function clearDiscount() {
+  appliedDiscount = null;
+}
+
+function getDiscountAmount() {
+  if (!appliedDiscount) return 0;
+  return Math.round(calculateCartTotal() * appliedDiscount.rate * 100) / 100;
+}
+
+function calculateDiscountedTotal() {
+  return Math.round((calculateCartTotal() - getDiscountAmount()) * 100) / 100;
+}
 
 function money(n) {
   return "$" + n.toFixed(2);
@@ -40,12 +64,14 @@ function calculateCartTotal() {
   return getCart().reduce((sum, line) => sum + line.lineTotal, 0);
 }
 
-// Fixed 2026-11-17: Kane CLI caught the v1 bug in its first real run
-// (review total $29.98 vs cart total $39.98; verdict "Review charge total
-// omits Ship-It Notebook", confidence 0.98). The review total now matches
-// the cart total. See BUG.md for the original bug and the run evidence.
+// Fixed 2026-11-19: Kane CLI caught the v2 bug in its first discount run
+// (review total $39.98 vs discounted total $35.98; verdict "Review total
+// ignores applied discount", confidence 0.99, session
+// f2c2e590-dec5-4b13-95dd-07ce0b5f3157). The review total now uses the
+// discounted total whenever a code is applied; with no code it equals the
+// cart total, so the original flow is unchanged.
 function getReviewTotal() {
-  return calculateCartTotal();
+  return calculateDiscountedTotal();
 }
 
 // --- Browser UI (skipped when loaded from Node for testing) ---
@@ -68,8 +94,21 @@ if (typeof document !== "undefined") {
       renderCart();
     });
 
+    document.getElementById("apply-discount").addEventListener("click", () => {
+      const input = document.getElementById("discount-code");
+      const msg = document.getElementById("discount-message");
+      if (applyDiscount(input.value)) {
+        msg.textContent = `Discount code ${appliedDiscount.code} applied: 10% off.`;
+      } else {
+        msg.textContent = "Invalid discount code.";
+      }
+      renderCart();
+    });
     document.getElementById("clear-cart").addEventListener("click", () => {
       clearCart();
+      clearDiscount();
+      document.getElementById("discount-code").value = "";
+      document.getElementById("discount-message").textContent = "";
       renderCart();
     });
     document.getElementById("go-checkout").addEventListener("click", () => {
@@ -77,7 +116,7 @@ if (typeof document !== "undefined") {
         alert("Your cart is empty. Add a product first.");
         return;
       }
-      document.getElementById("checkout-total").textContent = money(calculateCartTotal());
+      document.getElementById("checkout-total").textContent = money(calculateDiscountedTotal());
       showStep("step-checkout");
     });
     document.getElementById("back-to-shop").addEventListener("click", () => showStep("step-shop"));
@@ -88,6 +127,9 @@ if (typeof document !== "undefined") {
       guestEmail = document.getElementById("email").value.trim();
       document.getElementById("review-email").textContent = guestEmail;
       document.getElementById("review-cart-total").textContent = money(calculateCartTotal());
+      document.getElementById("review-discount").textContent = appliedDiscount
+        ? `Discount ${appliedDiscount.code} (10% off): -${money(getDiscountAmount())}`
+        : "No discount applied.";
       document.getElementById("review-total").textContent = money(getReviewTotal());
       const reviewItems = document.getElementById("review-items");
       reviewItems.innerHTML = "";
@@ -111,7 +153,10 @@ if (typeof document !== "undefined") {
 
     document.getElementById("start-again").addEventListener("click", () => {
       document.getElementById("email").value = "";
+      document.getElementById("discount-code").value = "";
+      document.getElementById("discount-message").textContent = "";
       guestEmail = "";
+      clearDiscount();
       showStep("step-shop");
     });
 
@@ -135,10 +180,19 @@ if (typeof document !== "undefined") {
       itemsEl.appendChild(li);
     });
     document.getElementById("cart-total").textContent = money(calculateCartTotal());
+    const discountEl = document.getElementById("cart-discount");
+    const discountedEl = document.getElementById("cart-discounted-total");
+    if (appliedDiscount) {
+      discountEl.textContent = `Discount ${appliedDiscount.code} (10% off): -${money(getDiscountAmount())}`;
+      discountedEl.textContent = money(calculateDiscountedTotal());
+    } else {
+      discountEl.textContent = "";
+      discountedEl.textContent = "";
+    }
   }
 }
 
 // Export for Node-based verification (no DOM in that case).
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { PRODUCTS, money, addToCart, clearCart, getCart, calculateCartTotal, getReviewTotal };
+  module.exports = { PRODUCTS, money, addToCart, clearCart, getCart, calculateCartTotal, getReviewTotal, applyDiscount, clearDiscount, getDiscountAmount, calculateDiscountedTotal };
 }

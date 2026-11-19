@@ -3,10 +3,10 @@
 A tiny, self-contained web shop that **refuses to ship until Kane CLI signs off**.
 
 Built for the [KaneCLI Online Hackathon](https://kaneclihack.sh) (12–19 Nov 2026,
-deadline 19 Nov 23:59 IST / 20 Nov 02:29 Taipei). One agent builds it, Kane CLI
+deadline extended to 26 Nov 23:59 IST / 27 Nov 02:29 Taipei). One agent builds it, Kane CLI
 verifies it in a real browser, and the gate blocks shipping until Kane passes.
 
-## Status: closed loop complete — Kane PASSED, ready to ship
+## Status: two closed loops complete — Kane PASSED both flows
 
 v1 had one deliberate, real bug (see `BUG.md`): the review step showed a total
 $10.00 lower than the cart total. Kane caught it in its first real run
@@ -15,16 +15,24 @@ landed, and the gate now prints `PASSED — Kane signed off. SHIP.`
 (see `kane/output-checkout/Result.md` and the
 [Kane run report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_98G0SV600PP9LCL0LW4D0AEVKFZPE1EUBN855NPTNQW65TR40G1FZAEVFQO0ZIQI?type=summary&agentView=true&fqdn=summary-page)).
 
+v2 (19 Nov 2026) added a second verified flow: discount code `SAVE10` (10% off,
+$39.98 → $35.98). The same story repeated — first the review step ignored the
+discount and charged the full $39.98, Kane caught it ("Review total ignores
+applied discount", confidence 0.99,
+[report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7SQ3B0T46G0F4FWKP346Q9K/dashboard/share/US_0Q0NZSA6SOBC3T16BIAQLWR5N398OKMI4ZZ8G6KQL3FGUGWNAQTQV8S8RGSUOIMT?type=summary&agentView=true&fqdn=summary-page)),
+then the fix landed and the gate runs both flows to PASSED. Details in `BUG.md`.
+
 ## What it is
 
 - A single-page static shop: plain HTML/CSS/JS, no build step, no backend,
   no paid services, no secrets.
 - 3 products: Kane Tote Bag $19.99, Gatekeeper Mug $29.99, Ship-It Notebook $9.99.
-- Add to cart, cart total, guest checkout with an email field, a review step
-  showing the entered email and the total, then an order confirmation with an
-  order number.
-- A Kane test flow (`kane/checkout_test.md`) and a ship gate (`gate.sh`, `gate.mjs`)
-  that exit non-zero and print BLOCKED when Kane fails.
+- Add to cart, cart total, discount code (SAVE10 = 10% off), guest checkout
+  with an email field, a review step showing the entered email, the applied
+  discount and the total, then an order confirmation with an order number.
+- Two Kane test flows (`kane/checkout_test.md`, `kane/discount_test.md`) and a
+  ship gate (`gate.sh`, `gate.mjs`) that runs both and exits non-zero and
+  prints BLOCKED when Kane fails either.
 
 ## How to run locally
 
@@ -80,10 +88,11 @@ The gate never fakes a result: if `kane-cli` is missing it prints
 | `index.html` | The shop: products, cart, checkout, review, confirmation |
 | `app.js` | Cart math + UI; the bug is in `getReviewTotal()` |
 | `style.css` | Minimal styling |
-| `kane/checkout_test.md` | Plain-English Kane test flow + how to run it |
-| `gate.sh` | Ship gate (bash): runs Kane, BLOCKED on fail, SHIP on pass |
+| `kane/checkout_test.md` | Plain-English Kane test flow (original checkout) + how to run it |
+| `kane/discount_test.md` | Plain-English Kane test flow (SAVE10 discount) + how to run it |
+| `gate.sh` | Ship gate (bash): runs Kane on both flows, BLOCKED on fail, SHIP on pass |
 | `gate.mjs` | Same gate in Node |
-| `BUG.md` | The deliberate v1 bug, where it lives, how Kane catches it |
+| `BUG.md` | The deliberate bugs (v1 + v2), where they live, how Kane caught them |
 
 ## Still missing (not done in this build)
 
@@ -93,6 +102,7 @@ The gate never fakes a result: if `kane-cli` is missing it prints
 - [x] Fix the bug from Kane's evidence, re-run the gate until it PASSES
   (passed 17 Nov 2026, session `1d79a092`).
 - [x] Push to a public GitHub repo (repo must be initialised on/after 12 Nov 2026) — done 17 Nov 2026: https://github.com/cassim1030/kane-checkout-gatekeeper (created today, Public, 3 commits).
-- [ ] Record a 3–5 min YouTube demo video (show the Kane fail, the fix, the pass).
-- [ ] At least 2 public posts about the project (X / Hacker News / Reddit / LinkedIn).
-- [ ] Submit before 19 Nov 23:59 IST via https://www.kaneclihack.sh/o/submit
+- [x] Record a 3–5 min YouTube demo video (show the Kane fail, the fix, the pass) — done 17 Nov 2026: https://youtu.be/a5Ssuc5-gGM
+- [x] At least 2 public posts about the project (X / Hacker News / Reddit / LinkedIn) — 3 posts @alldead0002 on 17 Nov 2026.
+- [x] Submit before the deadline via https://www.kaneclihack.sh/o/submit — submitted 17 Nov 2026, receipt KH-Y4SZQT; deadline extended to 26 Nov 23:59 IST.
+- [x] Second verified flow (discount code SAVE10) — built 19 Nov 2026, Kane caught the bug ("Review total ignores applied discount", 0.99), fix landed, gate re-ran to PASSED on both flows (sessions `b9a7c7b0` checkout, `4c3224dd` discount); GitHub upload + submission update next.

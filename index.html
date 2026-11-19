@@ -24,6 +24,14 @@
         <p id="cart-empty">Your cart is empty.</p>
         <ul id="cart-items"></ul>
         <p>Cart total: <strong id="cart-total">$0.00</strong></p>
+        <p><span id="cart-discount"></span></p>
+        <p>Discounted total: <strong id="cart-discounted-total"></strong></p>
+        <p>
+          <label for="discount-code">Discount code</label>
+          <input id="discount-code" name="discount-code" type="text" placeholder="SAVE10">
+          <button id="apply-discount" type="button">Apply discount</button>
+          <span id="discount-message"></span>
+        </p>
         <button id="clear-cart" type="button">Clear cart</button>
         <button id="go-checkout" type="button">Go to checkout</button>
       </div>
@@ -47,6 +55,7 @@
       <p>Email: <strong id="review-email"></strong></p>
       <ul id="review-items"></ul>
       <p>Cart total: <strong id="review-cart-total">$0.00</strong></p>
+      <p id="review-discount"></p>
       <p>Total to charge: <strong id="review-total">$0.00</strong></p>
       <button id="place-order" type="button">Place order</button>
       <button id="back-to-checkout" type="button">Back to checkout</button>

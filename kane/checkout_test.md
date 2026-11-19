@@ -28,22 +28,3 @@ The run passes only if every step above succeeds. (This section used to
 spell out the pass conditions, but Kane evaluates it as a separate step that
 navigates away from the shop to an external page this environment cannot
 reach, so the pass conditions now live only in the steps themselves.)
-
-## How to run
-
-```bash
-# from the repo root, with the shop running on http://localhost:8000
-kane-cli testmd run kane/checkout_test.md
-```
-
-Equivalent one-liner (same flow, no saved file):
-
-```bash
-kane-cli run "Check out without signing in. Verify the email and the total."
-```
-
-Or use the gate (blocks shipping on failure):
-
-```bash
-./gate.sh
-```

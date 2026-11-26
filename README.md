@@ -106,7 +106,7 @@ The gate never fakes a result: if `kane-cli` is missing it prints
 ## Still missing (not done in this build)
 
 - [x] Register on TestMu AI and claim the 10,000 free credits (done 17 Nov
-  2026 via GitHub login, alldead01@gmail.com; balance 11,200 at login).
+  2026 via GitHub login; balance 11,200 at login).
 - [x] Install + authenticate Kane CLI, run `./gate.sh`, keep the FAIL evidence.
 - [x] Fix the bug from Kane's evidence, re-run the gate until it PASSES
   (passed 17 Nov 2026, session `1d79a092`).

@@ -1,0 +1,18 @@
+{
+  "commit_id": "baee1dfd-6c20-431e-8342-d7f9f3ba2e6e",
+  "test_id": "299a8f4e-125f-4cd5-a037-4e441db6cd95",
+  "testcase_id": "01M7SQ3B0T46G0F4FWKP346Q9K",
+  "project_id": "01M7M0T8T63E9DTR505934KKPX",
+  "folder_id": "01M7M0T9JRYTN8HZ950JT6J656",
+  "org_id": "3436579",
+  "session_name": "discount",
+  "executions": [
+    {
+      "execution_id": "55255ba3-2251-49f8-8e8d-209ceca78766",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-11-26T06:58:24.843Z"
+    }
+  ]
+}

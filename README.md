@@ -6,6 +6,15 @@ Built for the [KaneCLI Online Hackathon](https://kaneclihack.sh) (12–19 Nov 20
 deadline extended to 26 Nov 23:59 IST / 27 Nov 02:29 Taipei). One agent builds it, Kane CLI
 verifies it in a real browser, and the gate blocks shipping until Kane passes.
 
+## Evidence: two closed loops, both PASSED
+
+| Flow | Deliberate bug | Kane FAIL | Fix | Kane PASS | Report |
+|---|---|---|---|---|---|
+| Checkout total | Review total was cart − $10 ($29.98 vs $39.98) | Run 1, session `ccef0388`, 149 s, confirmed, confidence 0.98 | `getReviewTotal()` returns the full cart total (one line) | Run 5, session `1d79a092`, 272 s, all 4 sections passed | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_98G0SV600PP9LCL0LW4D0AEVKFZPE1EUBN855NPTNQW65TR40G1FZAEVFQO0ZIQI?type=summary&agentView=true&fqdn=summary-page) |
+| Discount SAVE10 | Review ignored the discount, charged full $39.98 | Session `f2c2e590`, 212 s, confirmed, confidence 0.99 | Review shows the discounted total (one line) | Sessions `b9a7c7b0` (checkout, 152 s) + `4c3224dd` (discount, 201 s, review $35.98) | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7SQ3B0T46G0F4FWKP346Q9K/dashboard/share/US_WD8FTEY9YLEG5UFU0LJ6QUKS6IMTWU6OJRXLY2Z92PAWJGW49AHZOO3CEZVJXQK1?type=summary&agentView=true&fqdn=summary-page) |
+
+Honest note: on flow 1 Kane guessed the cause as "omits the notebook" while the code actually subtracted a flat $10 — the observable failure (review $29.98 vs cart $39.98) is identical, and `BUG.md` says so. The gate exits 0 only when `kane-cli` exits 0 **and** its output contains PASSED; nothing is faked.
+
 ## Status: two closed loops complete — Kane PASSED both flows
 
 v1 had one deliberate, real bug (see `BUG.md`): the review step showed a total
@@ -101,8 +110,8 @@ The gate never fakes a result: if `kane-cli` is missing it prints
 - [x] Install + authenticate Kane CLI, run `./gate.sh`, keep the FAIL evidence.
 - [x] Fix the bug from Kane's evidence, re-run the gate until it PASSES
   (passed 17 Nov 2026, session `1d79a092`).
-- [x] Push to a public GitHub repo (repo must be initialised on/after 12 Nov 2026) — done 17 Nov 2026: https://github.com/cassim1030/kane-checkout-gatekeeper (created today, Public, 3 commits).
+- [x] Push to a public GitHub repo (repo must be initialised on/after 12 Nov 2026) — done 17 Nov 2026: https://github.com/cassim1030/kane-checkout-gatekeeper (Public).
 - [x] Record a 3–5 min YouTube demo video (show the Kane fail, the fix, the pass) — done 17 Nov 2026: https://youtu.be/a5Ssuc5-gGM
-- [x] At least 2 public posts about the project (X / Hacker News / Reddit / LinkedIn) — 3 posts @alldead0002 on 17 Nov 2026.
+- [x] At least 2 public posts about the project (X / Hacker News / Reddit / LinkedIn) — 6 posts @alldead0002 (3 on 17 Nov, 3 on 19 Nov 2026).
 - [x] Submit before the deadline via https://www.kaneclihack.sh/o/submit — submitted 17 Nov 2026, receipt KH-Y4SZQT; deadline extended to 26 Nov 23:59 IST.
-- [x] Second verified flow (discount code SAVE10) — built 19 Nov 2026, Kane caught the bug ("Review total ignores applied discount", 0.99), fix landed, gate re-ran to PASSED on both flows (sessions `b9a7c7b0` checkout, `4c3224dd` discount); GitHub upload + submission update next.
+- [x] Second verified flow (discount code SAVE10) — built 19 Nov 2026, Kane caught the bug ("Review total ignores applied discount", 0.99), fix landed, gate re-ran to PASSED on both flows (sessions `b9a7c7b0` checkout, `4c3224dd` discount); GitHub upload done (11 files) and submission description updated the same day (receipt KH-Y4SZQT, "Agent used" still Muse).

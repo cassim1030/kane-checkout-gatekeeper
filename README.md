@@ -10,8 +10,8 @@ verifies it in a real browser, and the gate blocks shipping until Kane passes.
 
 | Flow | Deliberate bug | Kane FAIL | Fix | Kane PASS | Report |
 |---|---|---|---|---|---|
-| Checkout total | Review total was cart − $10 ($29.98 vs $39.98) | Run 1, session `ccef0388`, 149 s, confirmed, confidence 0.98 | `getReviewTotal()` returns the full cart total (one line) | Run 5, session `1d79a092`, 272 s, all 4 sections passed | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_98G0SV600PP9LCL0LW4D0AEVKFZPE1EUBN855NPTNQW65TR40G1FZAEVFQO0ZIQI?type=summary&agentView=true&fqdn=summary-page) |
-| Discount SAVE10 | Review ignored the discount, charged full $39.98 | Session `f2c2e590`, 212 s, confirmed, confidence 0.99 | Review shows the discounted total (one line) | Sessions `b9a7c7b0` (checkout, 152 s) + `4c3224dd` (discount, 201 s, review $35.98) | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7SQ3B0T46G0F4FWKP346Q9K/dashboard/share/US_WD8FTEY9YLEG5UFU0LJ6QUKS6IMTWU6OJRXLY2Z92PAWJGW49AHZOO3CEZVJXQK1?type=summary&agentView=true&fqdn=summary-page) |
+| Checkout total | Review total was cart − $10 ($29.98 vs $39.98) | Run 1, session `ccef0388`, 149 s, confirmed, confidence 0.98 | `getReviewTotal()` returns the full cart total (one line) | Re-run 26 Nov 2026, session `a7fb42d1`, 167 s, all sections passed | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_6QHVETJ83FAHCSF1NYDE64F11V56W8VF83KD5SA81LM71CQ5V9O7JVYRNJKFNXAI?type=summary&agentView=true&fqdn=summary-page) |
+| Discount SAVE10 | Review ignored the discount, charged full $39.98 | Session `f2c2e590`, 212 s, confirmed, confidence 0.99 | Review shows the discounted total (one line) | Re-run 26 Nov 2026, sessions `a7fb42d1` (checkout, 167 s) + `baee1dfd` (discount, 199 s, review $35.98) | [report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7SQ3B0T46G0F4FWKP346Q9K/dashboard/share/US_ARFYD846H2P1F34EC9EFXK8TSQMV4U42ZHD8IE7CSKI7X7ATPYUBYAIGP935YNRW?type=summary&agentView=true&fqdn=summary-page) |
 
 Honest note: on flow 1 Kane guessed the cause as "omits the notebook" while the code actually subtracted a flat $10 — the observable failure (review $29.98 vs cart $39.98) is identical, and `BUG.md` says so. The gate exits 0 only when `kane-cli` exits 0 **and** its output contains PASSED; nothing is faked.
 
@@ -22,7 +22,7 @@ $10.00 lower than the cart total. Kane caught it in its first real run
 (review $29.98 vs cart $39.98, verdict confirmed, confidence 0.98), the fix
 landed, and the gate now prints `PASSED — Kane signed off. SHIP.`
 (see `kane/output-checkout/Result.md` and the
-[Kane run report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_98G0SV600PP9LCL0LW4D0AEVKFZPE1EUBN855NPTNQW65TR40G1FZAEVFQO0ZIQI?type=summary&agentView=true&fqdn=summary-page)).
+[Kane run report](https://test-manager.lambdatest.com/projects/01M7M0T8T63E9DTR505934KKPX/test-cases/01M7M0X46K2JJNDAZ5GW0HX5Q0/dashboard/share/US_6QHVETJ83FAHCSF1NYDE64F11V56W8VF83KD5SA81LM71CQ5V9O7JVYRNJKFNXAI?type=summary&agentView=true&fqdn=summary-page)).
 
 v2 (19 Nov 2026) added a second verified flow: discount code `SAVE10` (10% off,
 $39.98 → $35.98). The same story repeated — first the review step ignored the

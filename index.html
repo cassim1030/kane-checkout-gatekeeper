@@ -10,15 +10,12 @@
   <header>
     <h1>Checkout Gatekeeper</h1>
     <p class="tagline">A tiny shop that refuses to ship until Kane CLI signs off.</p>
-    <p class="version">v1 — known bug, see <code>BUG.md</code>. Not shipped.</p>
+    <p class="version">v2 — Kane signed off. Shipped.</p>
   </header>
-
   <main>
-    <!-- Step 1: shop -->
     <section id="step-shop" class="step">
       <h2>Shop</h2>
       <div id="products" class="products"></div>
-
       <h2>Cart</h2>
       <div id="cart">
         <p id="cart-empty">Your cart is empty.</p>
@@ -36,8 +33,6 @@
         <button id="go-checkout" type="button">Go to checkout</button>
       </div>
     </section>
-
-    <!-- Step 2: guest checkout -->
     <section id="step-checkout" class="step" hidden>
       <h2>Checkout as guest</h2>
       <form id="checkout-form">
@@ -48,8 +43,6 @@
         <button id="back-to-shop" type="button">Back to shop</button>
       </form>
     </section>
-
-    <!-- Step 3: review -->
     <section id="step-review" class="step" hidden>
       <h2>Review your order</h2>
       <p>Email: <strong id="review-email"></strong></p>
@@ -60,21 +53,17 @@
       <button id="place-order" type="button">Place order</button>
       <button id="back-to-checkout" type="button">Back to checkout</button>
     </section>
-
-    <!-- Step 4: confirmation -->
     <section id="step-confirmation" class="step" hidden>
       <h2>Order confirmed</h2>
       <p>Thank you! Your order number is <strong id="order-number"></strong>.</p>
       <p>Email: <strong id="confirmation-email"></strong></p>
-      <p>Total charged: <strong id="confirmation-total">$0.00</strong></p>
+      <p>Total charged: <strong id="confirmation-total"></strong></p>
       <button id="start-again" type="button">Start a new order</button>
     </section>
   </main>
-
   <footer>
-    <p>Built for the KaneCLI Online Hackathon (12–19 Nov 2026). Agent-built, Kane-verified — or blocked.</p>
+    <p>Built for the KaneCLI Online Hackathon (12–26 Nov 2026). Agent-built, Kane-verified — or blocked.</p>
   </footer>
-
   <script src="app.js"></script>
 </body>
 </html>
